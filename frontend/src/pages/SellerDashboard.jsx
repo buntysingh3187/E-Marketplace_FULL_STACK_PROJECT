@@ -125,39 +125,58 @@ export default function SellerDashboard() {
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
       paddingTop: '2rem',
-      paddingBottom: '3rem'
+      paddingBottom: '3rem',
+      overflowX: 'hidden'
     }}>
-      <div className="container">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="fw-bold" style={{ 
+      <div className="container" style={{ maxWidth: '1400px' }}>
+        {/* Header */}
+        <div className="mb-5 text-center">
+          <h2 className="fw-bold mb-2" style={{ 
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-            fontSize: '2.8rem'
+            fontSize: '3rem'
           }}>💼 Seller Dashboard</h2>
-          <Link to="/browse" className="btn btn-lg" 
-            style={{ 
+          <p style={{ color: '#718096', fontSize: '1.2rem' }}>Manage your products and orders</p>
+        </div>
+        
+        {/* Stats Cards */}
+        <div className="row mb-4">
+          <div className="col-md-6 mb-3">
+            <div className="card border-0" style={{
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              borderRadius: '20px',
+              boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)',
               color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              padding: '12px 24px',
-              fontWeight: 'bold',
-              boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={e => {
-              e.target.style.transform = 'translateY(-2px)'
-              e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.6)'
-            }}
-            onMouseLeave={e => {
-              e.target.style.transform = 'translateY(0)'
-              e.target.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)'
-            }}
-          >
-            🏪 Browse All Products
-          </Link>
+              padding: '2rem'
+            }}>
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <h3 className="fw-bold mb-1">{products.length}</h3>
+                  <p className="mb-0 opacity-75">Total Products</p>
+                </div>
+                <div style={{ fontSize: '3rem', opacity: 0.3 }}>📦</div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6 mb-3">
+            <div className="card border-0" style={{
+              background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+              borderRadius: '20px',
+              boxShadow: '0 10px 30px rgba(17, 153, 142, 0.3)',
+              color: 'white',
+              padding: '2rem'
+            }}>
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <h3 className="fw-bold mb-1">{orders.length}</h3>
+                  <p className="mb-0 opacity-75">Total Orders</p>
+                </div>
+                <div style={{ fontSize: '3rem', opacity: 0.3 }}>🛒</div>
+              </div>
+            </div>
+          </div>
         </div>
       
         {successMsg && (
@@ -177,57 +196,90 @@ export default function SellerDashboard() {
           </div>
         )}
       
-        <div className="row mb-5">
-          <div className="col-md-6">
-            <div className="card" style={{ 
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              borderRadius: '20px',
-              border: editId ? '3px solid #FFC107' : 'none',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
-              backdropFilter: 'blur(10px)'
-            }}>
-              <div className="card-body p-4">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                  <h4 className="fw-bold" style={{ 
-                    background: editId ? 'linear-gradient(135deg, #FFC107 0%, #FF6F00 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
-                  }}>{editId ? '✏️ Edit Product' : '➕ Add Product'}</h4>
+        {/* Add/Edit Product Form - Full Width */}
+        <div className="mb-5">
+          <div className="card border-0" style={{ 
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            boxShadow: editId ? '0 20px 60px rgba(255, 193, 7, 0.3)' : '0 20px 60px rgba(102, 126, 234, 0.2)',
+            backdropFilter: 'blur(10px)',
+            border: editId ? '2px solid #FFC107' : '2px solid transparent'
+          }}>
+            <div className="card-body p-5">
+              <div className="row align-items-center mb-4">
+                <div className="col-md-6">
+                  <div className="d-flex align-items-center gap-3">
+                    <div style={{
+                      width: '70px',
+                      height: '70px',
+                      borderRadius: '50%',
+                      background: editId ? 'linear-gradient(135deg, #FFC107 0%, #FF6F00 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '2rem',
+                      flexShrink: 0
+                    }}>
+                      {editId ? '✏️' : '➕'}
+                    </div>
+                    <div>
+                      <h3 className="fw-bold mb-1" style={{ 
+                        color: '#2d3748',
+                        fontSize: '2rem'
+                      }}>{editId ? 'Edit Product' : 'Add New Product'}</h3>
+                      <p className="mb-0" style={{ color: '#718096' }}>
+                        {editId ? 'Update your product details' : 'Fill in the details to add a new product'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 text-end">
                   {editId && (
                     <span className="badge" style={{ 
                       background: 'linear-gradient(135deg, #FFC107 0%, #FF6F00 100%)',
                       color: 'white',
-                      fontSize: '0.9rem',
-                      padding: '0.5rem 1rem',
-                      borderRadius: '20px'
+                      fontSize: '1rem',
+                      padding: '0.6rem 1.5rem',
+                      borderRadius: '25px'
                     }}>
-                      Editing Mode
+                      📝 Editing Mode
                     </span>
                   )}
                 </div>
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label className="form-label fw-bold" style={{ color: '#2d3748' }}>📦 Name</label>
-                    <input type="text" name="name" className="form-control" 
+              </div>
+              
+              <form onSubmit={handleSubmit}>
+                <div className="row">
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label fw-bold" style={{ color: '#2d3748', fontSize: '1.05rem' }}>📦 Product Name</label>
+                    <input type="text" name="name" className="form-control form-control-lg" 
                       style={{ borderRadius: '12px', border: '2px solid #e2e8f0', padding: '12px' }}
-                      value={form.name} onChange={handleFormChange} required />
+                      value={form.name} onChange={handleFormChange} 
+                      placeholder="Enter product name"
+                      required />
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label fw-bold" style={{ color: '#2d3748' }}>📝 Description</label>
-                    <textarea name="description" className="form-control" 
+                  <div className="col-md-3 mb-3">
+                    <label className="form-label fw-bold" style={{ color: '#2d3748', fontSize: '1.05rem' }}>💰 Price (₹)</label>
+                    <input type="number" name="price" className="form-control form-control-lg" 
                       style={{ borderRadius: '12px', border: '2px solid #e2e8f0', padding: '12px' }}
-                      value={form.description} onChange={handleFormChange} rows="3"></textarea>
+                      value={form.price} onChange={handleFormChange} 
+                      placeholder="0.00"
+                      required step="0.01" />
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label fw-bold" style={{ color: '#2d3748' }}>💰 Price</label>
-                    <input type="number" name="price" className="form-control" 
+                  <div className="col-md-3 mb-3">
+                    <label className="form-label fw-bold" style={{ color: '#2d3748', fontSize: '1.05rem' }}>📊 Stock</label>
+                    <input type="number" name="stock" className="form-control form-control-lg" 
                       style={{ borderRadius: '12px', border: '2px solid #e2e8f0', padding: '12px' }}
-                      value={form.price} onChange={handleFormChange} required step="0.01" />
+                      value={form.stock} onChange={handleFormChange} 
+                      placeholder="Quantity"
+                      required />
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label fw-bold" style={{ color: '#2d3748' }}>📁 Category</label>
-                    <select name="category" className="form-select" 
+                </div>
+                
+                <div className="row">
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label fw-bold" style={{ color: '#2d3748', fontSize: '1.05rem' }}>📁 Category</label>
+                    <select name="category" className="form-select form-select-lg" 
                       style={{ borderRadius: '12px', border: '2px solid #e2e8f0', padding: '12px' }}
                       value={form.category} onChange={handleFormChange}>
                       <option value="">Select Category</option>
@@ -241,78 +293,101 @@ export default function SellerDashboard() {
                       <option value="Other">Other</option>
                     </select>
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label fw-bold" style={{ color: '#2d3748' }}>📊 Stock</label>
-                    <input type="number" name="stock" className="form-control" 
-                      style={{ borderRadius: '12px', border: '2px solid #e2e8f0', padding: '12px' }}
-                      value={form.stock} onChange={handleFormChange} />
-                  </div>
-                  <div className="mb-4">
-                    <label className="form-label fw-bold" style={{ color: '#2d3748' }}>🖼️ Image {editId && <small className="text-muted">(Leave empty to keep current image)</small>}</label>
-                    <input type="file" className="form-control" 
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label fw-bold" style={{ color: '#2d3748', fontSize: '1.05rem' }}>🖼️ Product Image</label>
+                    <input type="file" name="image" className="form-control form-control-lg" 
                       style={{ borderRadius: '12px', border: '2px solid #e2e8f0', padding: '12px' }}
                       onChange={handleFileChange} accept="image/*" />
+                    {!editId && <small className="text-muted">Optional - You can add later</small>}
                   </div>
-                  <div className="d-flex gap-2">
-                    <button type="submit" className="btn btn-lg" 
+                </div>
+                
+                <div className="mb-4">
+                  <label className="form-label fw-bold" style={{ color: '#2d3748', fontSize: '1.05rem' }}>📝 Description</label>
+                  <textarea name="description" className="form-control form-control-lg" 
+                    style={{ borderRadius: '12px', border: '2px solid #e2e8f0', padding: '12px' }}
+                    value={form.description} onChange={handleFormChange} 
+                    placeholder="Describe your product..."
+                    rows="4"></textarea>
+                </div>
+                
+                <div className="d-flex gap-3 justify-content-end">
+                  {editId && (
+                    <button type="button" className="btn btn-lg btn-outline-secondary" 
                       style={{ 
-                        background: editId ? 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)' : 'linear-gradient(135deg, #FFC107 0%, #FF6F00 100%)',
-                        color: 'white',
-                        border: 'none',
-                        fontWeight: 'bold',
-                        borderRadius: '12px',
-                        padding: '12px 30px',
-                        boxShadow: editId ? '0 6px 20px rgba(17, 153, 142, 0.4)' : '0 6px 20px rgba(255, 193, 7, 0.4)',
-                        transition: 'all 0.3s ease'
+                        borderRadius: '12px', 
+                        padding: '12px 30px', 
+                        fontWeight: '600',
+                        border: '2px solid #e2e8f0'
                       }}
-                      onMouseEnter={e => {
-                        e.target.style.transform = 'translateY(-2px)'
-                        e.target.style.boxShadow = editId ? '0 8px 25px rgba(17, 153, 142, 0.6)' : '0 8px 25px rgba(255, 193, 7, 0.6)'
-                      }}
-                      onMouseLeave={e => {
-                        e.target.style.transform = 'translateY(0)'
-                        e.target.style.boxShadow = editId ? '0 6px 20px rgba(17, 153, 142, 0.4)' : '0 6px 20px rgba(255, 193, 7, 0.4)'
-                      }}
-                    >
-                      {editId ? '✓ Update Product' : '+ Add Product'}
+                      onClick={() => { 
+                        setEditId(null); 
+                        setForm({ name: '', description: '', price: '', category: '', stock: '', image: null }) 
+                      }}>
+                      ❌ Cancel
                     </button>
-                    {editId && (
-                      <button type="button" className="btn btn-lg btn-outline-secondary" 
-                        style={{ borderRadius: '12px', padding: '12px 24px', fontWeight: '600' }}
-                        onClick={() => { setEditId(null); setForm({ name: '', description: '', price: '', category: '', stock: '', image: null }) }}>
-                        ❌ Cancel
-                      </button>
-                    )}
-                  </div>
-                </form>
-              </div>
+                  )}
+                  <button type="submit" className="btn btn-lg" 
+                    style={{ 
+                      background: editId ? 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      color: 'white',
+                      border: 'none',
+                      fontWeight: 'bold',
+                      borderRadius: '12px',
+                      padding: '12px 40px',
+                      boxShadow: editId ? '0 6px 20px rgba(17, 153, 142, 0.4)' : '0 6px 20px rgba(102, 126, 234, 0.4)',
+                      transition: 'all 0.3s ease',
+                      fontSize: '1.1rem'
+                    }}
+                    onMouseEnter={e => {
+                      e.target.style.transform = 'translateY(-2px)'
+                      e.target.style.boxShadow = editId ? '0 8px 25px rgba(17, 153, 142, 0.6)' : '0 8px 25px rgba(102, 126, 234, 0.6)'
+                    }}
+                    onMouseLeave={e => {
+                      e.target.style.transform = 'translateY(0)'
+                      e.target.style.boxShadow = editId ? '0 6px 20px rgba(17, 153, 142, 0.4)' : '0 6px 20px rgba(102, 126, 234, 0.4)'
+                    }}
+                  >
+                    {editId ? '✓ Update Product' : '➕ Add Product'}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
 
-        <h4 className="mt-4 mb-3 fw-bold" style={{ 
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text'
-        }}>📦 My Products</h4>
-        <div className="card" style={{ 
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: '20px',
-          border: 'none',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
-          backdropFilter: 'blur(10px)'
-        }}>
-          <div className="card-body p-4">
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr style={{ color: '#2d3748', borderBottom: '2px solid #e2e8f0' }}>
-                    <th style={{ fontWeight: 'bold', padding: '1rem' }}>Name</th>
-                    <th style={{ fontWeight: 'bold', padding: '1rem' }}>Price</th>
-                    <th style={{ fontWeight: 'bold', padding: '1rem' }}>Category</th>
-                    <th style={{ fontWeight: 'bold', padding: '1rem' }}>Stock</th>
-                    <th style={{ fontWeight: 'bold', padding: '1rem' }}>Actions</th>
+        {/* Products Section */}
+        <div className="mb-5">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h3 className="fw-bold" style={{ 
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontSize: '2rem'
+            }}>📦 My Products ({products.length})</h3>
+          </div>
+          
+          <div className="card border-0" style={{ 
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+            backdropFilter: 'blur(10px)',
+            overflow: 'hidden'
+          }}>
+            <div className="card-body p-0">
+              <div className="table-responsive">
+                <table className="table table-hover mb-0">
+                  <thead style={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white'
+                  }}>
+                    <tr>
+                      <th style={{ fontWeight: 'bold', padding: '1.2rem', border: 'none' }}>Product</th>
+                      <th style={{ fontWeight: 'bold', padding: '1.2rem', border: 'none' }}>Price</th>
+                      <th style={{ fontWeight: 'bold', padding: '1.2rem', border: 'none' }}>Category</th>
+                      <th style={{ fontWeight: 'bold', padding: '1.2rem', border: 'none' }}>Stock</th>
+                      <th style={{ fontWeight: 'bold', padding: '1.2rem', border: 'none', textAlign: 'center' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -366,15 +441,30 @@ export default function SellerDashboard() {
             </div>
           </div>
         </div>
+        </div>
 
-        <h4 className="mt-5 mb-3 fw-bold" style={{ 
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text'
-        }}>📋 Orders Received</h4>
-        {orders.length === 0 && <p style={{ color: '#718096' }}>📭 No orders yet.</p>}
-        {orders.map(o => (
+        {/* Orders Section */}
+        <div className="mb-5">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h3 className="fw-bold" style={{ 
+              background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontSize: '2rem'
+            }}>📋 Orders Received ({orders.length})</h3>
+          </div>
+          {orders.length === 0 && (
+            <div className="text-center py-5" style={{
+              background: 'rgba(255, 255, 255, 0.5)',
+              borderRadius: '20px',
+              border: '2px dashed #e2e8f0'
+            }}>
+              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📭</div>
+              <p style={{ color: '#718096', fontSize: '1.2rem' }}>No orders received yet</p>
+            </div>
+          )}
+          {orders.map(o => (
           <div key={o._id} className="card mb-4" style={{ 
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             borderRadius: '20px',
@@ -507,6 +597,7 @@ export default function SellerDashboard() {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   )

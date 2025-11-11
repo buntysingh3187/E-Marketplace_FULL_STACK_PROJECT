@@ -78,12 +78,87 @@ function Navbar() {
                     zIndex: 1051,
                     borderRadius: '15px',
                     border: 'none',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                    padding: '10px'
                   }}>
-                    <li><Link className="dropdown-item" to="/profile" style={{ borderRadius: '10px', margin: '5px' }}>My Profile</Link></li>
-                    <li><Link className="dropdown-item" to="/change-password" style={{ borderRadius: '10px', margin: '5px' }}>Change Password</Link></li>
-                    <li><hr className="dropdown-divider" /></li>
-                    <li><button className="dropdown-item" onClick={logout} style={{ borderRadius: '10px', margin: '5px', color: '#e53e3e' }}>Logout</button></li>
+                    <li>
+                      <Link 
+                        className="dropdown-item" 
+                        to="/profile" 
+                        style={{ 
+                          borderRadius: '10px', 
+                          padding: '10px 15px',
+                          transition: 'all 0.2s ease',
+                          fontWeight: '500'
+                        }}
+                        onMouseEnter={e => {
+                          e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                          e.target.style.color = 'white'
+                          e.target.style.transform = 'translateX(5px)'
+                        }}
+                        onMouseLeave={e => {
+                          e.target.style.background = 'transparent'
+                          e.target.style.color = '#2d3748'
+                          e.target.style.transform = 'translateX(0)'
+                        }}
+                      >
+                        👤 My Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link 
+                        className="dropdown-item" 
+                        to="/change-password" 
+                        style={{ 
+                          borderRadius: '10px', 
+                          padding: '10px 15px',
+                          transition: 'all 0.2s ease',
+                          fontWeight: '500'
+                        }}
+                        onMouseEnter={e => {
+                          e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                          e.target.style.color = 'white'
+                          e.target.style.transform = 'translateX(5px)'
+                        }}
+                        onMouseLeave={e => {
+                          e.target.style.background = 'transparent'
+                          e.target.style.color = '#2d3748'
+                          e.target.style.transform = 'translateX(0)'
+                        }}
+                      >
+                        🔒 Change Password
+                      </Link>
+                    </li>
+                    <li><hr className="dropdown-divider" style={{ margin: '10px 0' }} /></li>
+                    <li>
+                      <button 
+                        className="dropdown-item" 
+                        onClick={logout} 
+                        style={{ 
+                          borderRadius: '10px', 
+                          padding: '10px 15px',
+                          color: '#e53e3e',
+                          transition: 'all 0.2s ease',
+                          fontWeight: '500',
+                          border: 'none',
+                          background: 'transparent',
+                          width: '100%',
+                          textAlign: 'left'
+                        }}
+                        onMouseEnter={e => {
+                          e.target.style.background = 'linear-gradient(135deg, #feb2b2 0%, #fc8181 100%)'
+                          e.target.style.color = 'white'
+                          e.target.style.transform = 'translateX(5px)'
+                        }}
+                        onMouseLeave={e => {
+                          e.target.style.background = 'transparent'
+                          e.target.style.color = '#e53e3e'
+                          e.target.style.transform = 'translateX(0)'
+                        }}
+                      >
+                        🚪 Logout
+                      </button>
+                    </li>
                   </ul>
                 </li>
               </>

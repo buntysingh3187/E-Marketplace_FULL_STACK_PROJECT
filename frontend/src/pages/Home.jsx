@@ -76,8 +76,12 @@ export default function Home() {
   }
 
   return (
-    <div className="container-fluid py-4" style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', minHeight: '100vh' }}>
-      <div className="container">
+    <div className="container-fluid py-4" style={{ 
+      background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', 
+      minHeight: '100vh',
+      overflowX: 'hidden' 
+    }}>
+      <div className="container" style={{ maxWidth: '1400px' }}>
         {/* Hero Section */}
         <div className="mb-5 text-center py-5" style={{ 
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -137,8 +141,8 @@ export default function Home() {
           }}>
             Find Your Perfect Product
           </h4>
-          <div className="row">
-            <div className="col-md-3 mb-3">
+          <div className="row g-3">
+            <div className="col-lg-4 col-md-6">
               <input
                 type="text"
                 className="form-control form-control-lg"
@@ -156,7 +160,7 @@ export default function Home() {
                 onBlur={e => e.target.style.border = '2px solid #e0e0e0'}
               />
             </div>
-            <div className="col-md-2 mb-3">
+            <div className="col-lg-2 col-md-6">
               <select
                 className="form-select form-select-lg"
                 value={category}
@@ -179,7 +183,7 @@ export default function Home() {
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div className="col-md-2 mb-3">
+            <div className="col-lg-2 col-md-4">
               <input
                 type="number"
                 className="form-control form-control-lg"
@@ -194,7 +198,7 @@ export default function Home() {
                 }}
               />
             </div>
-            <div className="col-md-2 mb-3">
+            <div className="col-lg-2 col-md-4">
               <input
                 type="number"
                 className="form-control form-control-lg"
@@ -209,7 +213,7 @@ export default function Home() {
                 }}
               />
             </div>
-            <div className="col-md-2 mb-3">
+            <div className="col-lg-2 col-md-4">
               <select
                 className="form-select form-select-lg"
                 value={sortBy}
@@ -228,9 +232,11 @@ export default function Home() {
                 <option value="newest">Newest</option>
               </select>
             </div>
-            <div className="col-md-1 mb-3">
+          </div>
+          <div className="row mt-3">
+            <div className="col-12 d-flex justify-content-center gap-3">
               <button 
-                className="btn btn-lg w-100" 
+                className="btn btn-lg px-5" 
                 style={{ 
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                   color: 'white',
@@ -245,14 +251,10 @@ export default function Home() {
                 onMouseEnter={e => e.target.style.transform = 'scale(1.05)'}
                 onMouseLeave={e => e.target.style.transform = 'scale(1)'}
               >
-                Search
+                🔍 Search Products
               </button>
-            </div>
-          </div>
-          <div className="row mt-2">
-            <div className="col-md-12">
               <button 
-                className="btn btn-outline-secondary" 
+                className="btn btn-outline-secondary btn-lg px-4" 
                 onClick={handleClear}
                 style={{ 
                   borderRadius: '15px',
@@ -260,7 +262,7 @@ export default function Home() {
                   fontWeight: '600'
                 }}
               >
-                Clear All Filters
+                🔄 Clear Filters
               </button>
             </div>
           </div>
