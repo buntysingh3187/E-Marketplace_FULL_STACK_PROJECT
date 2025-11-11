@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const config = require('./config/config');
 
 dotenv.config();
 
@@ -14,7 +15,27 @@ const wishlistRoutes = require('./routes/wishlistRoutes');
 
 const app = express();
 
-app.use(cors());
+// CORS configuration - supports multiple origins
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = Array.isArray(config.corsOrigin) 
+      ? config.corsOrigin 
+      : [config.corsOrigin];
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -33,14 +54,15 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message || 'Server Error' });
 });
 
-const PORT = process.env.PORT || 5000;
-const MONGO = process.env.MONGO_URI || 'mongodb://localhost:27017/emarket';
-
 mongoose
-  .connect(MONGO, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(config.mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('MongoDB connected');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(config.port, () => {
+      console.log(`Server running on port ${config.port}`);
+      console.log(`Environment: ${config.nodeEnv}`);
+      console.log(`CORS enabled for: ${config.corsOrigin}`);
+    });
   })
   .catch((err) => {
     console.error('MongoDB connection error:', err);
