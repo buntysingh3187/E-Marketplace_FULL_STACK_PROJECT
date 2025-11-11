@@ -15,7 +15,7 @@ const wishlistRoutes = require('./routes/wishlistRoutes');
 
 const app = express();
 
-// CORS configuration - supports multiple origins
+// CORS configuration - supports multiple origins and wildcards
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, Postman, etc.)
@@ -25,7 +25,20 @@ const corsOptions = {
       ? config.corsOrigin 
       : [config.corsOrigin];
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Check if origin matches any allowed origin (including wildcards)
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      // Convert wildcard pattern to regex
+      if (allowedOrigin.includes('*')) {
+        const pattern = allowedOrigin
+          .replace(/\./g, '\\.')
+          .replace(/\*/g, '.*');
+        const regex = new RegExp(`^${pattern}$`);
+        return regex.test(origin);
+      }
+      return allowedOrigin === origin;
+    });
+    
+    if (isAllowed) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
