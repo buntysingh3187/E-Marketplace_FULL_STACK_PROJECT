@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function Profile() {
   const { user, token } = useAuth()
@@ -25,7 +26,7 @@ export default function Profile() {
 
   const fetchProfile = () => {
     setLoading(true)
-    axios.get('http://localhost:5000/api/auth/profile', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(API_ENDPOINTS.PROFILE, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         setProfile(res.data)
         setForm({
@@ -90,7 +91,7 @@ export default function Profile() {
         address: form.address
       }
       
-      await axios.put('http://localhost:5000/api/auth/profile', updateData, {
+      await axios.put(API_ENDPOINTS.PROFILE, updateData, {
         headers: { Authorization: `Bearer ${token}` }
       })
       alert('Profile updated successfully!')

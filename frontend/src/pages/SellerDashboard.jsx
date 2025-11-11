@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
 import { Link } from 'react-router-dom'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function SellerDashboard() {
   const [products, setProducts] = useState([])
@@ -13,7 +14,7 @@ export default function SellerDashboard() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/products/seller', { headers: { Authorization: `Bearer ${token}` } })
+      const { data } = await axios.get(API_ENDPOINTS.SELLER_PRODUCTS, { headers: { Authorization: `Bearer ${token}` } })
       setProducts(data)
     } catch (err) {
       console.error(err)
@@ -22,7 +23,7 @@ export default function SellerDashboard() {
 
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/orders/seller', { headers: { Authorization: `Bearer ${token}` } })
+      const { data } = await axios.get(API_ENDPOINTS.SELLER_ORDERS, { headers: { Authorization: `Bearer ${token}` } })
       setOrders(data)
     } catch (err) {
       console.error(err)
@@ -31,7 +32,7 @@ export default function SellerDashboard() {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/orders/${orderId}/status`, 
+      await axios.patch(`${API_ENDPOINTS.ORDERS}/${orderId}/status`, 
         { status: newStatus }, 
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -73,7 +74,7 @@ export default function SellerDashboard() {
 
     try {
       if (editId) {
-        await axios.put(`http://localhost:5000/api/products/${editId}`, formData, { 
+        await axios.put(`${API_ENDPOINTS.PRODUCTS}/${editId}`, formData, { 
           headers: { 
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -82,7 +83,7 @@ export default function SellerDashboard() {
         setSuccessMsg('Product updated successfully!')
         setEditId(null)
       } else {
-        await axios.post('http://localhost:5000/api/products', formData, { 
+        await axios.post(API_ENDPOINTS.PRODUCTS, formData, { 
           headers: { 
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -110,7 +111,7 @@ export default function SellerDashboard() {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this product?')) return
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+      await axios.delete(`${API_ENDPOINTS.PRODUCTS}/${id}`, { headers: { Authorization: `Bearer ${token}` } })
       setSuccessMsg('Product deleted successfully!')
       fetchProducts()
       setTimeout(() => setSuccessMsg(''), 3000)

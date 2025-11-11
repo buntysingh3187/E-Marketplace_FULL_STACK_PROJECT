@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function MyOrders() {
   const [orders, setOrders] = useState([])
@@ -9,7 +10,7 @@ export default function MyOrders() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/orders/my', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(API_ENDPOINTS.MY_ORDERS, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         console.log('Orders fetched:', res.data)
         setOrders(res.data)

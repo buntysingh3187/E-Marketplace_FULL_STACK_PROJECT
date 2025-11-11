@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -18,7 +19,7 @@ export default function Login() {
       return
     }
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password })
+      const { data } = await axios.post(API_ENDPOINTS.LOGIN, { email, password })
       login(data.token, data.user)
       navigate(data.user.role === 'seller' ? '/seller' : '/browse')
     } catch (err) {

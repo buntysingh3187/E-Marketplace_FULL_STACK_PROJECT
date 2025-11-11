@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
+import { API_ENDPOINTS, API_URL } from '../config/api'
 
 export default function Home() {
   const [products, setProducts] = useState([])
@@ -24,7 +25,7 @@ export default function Home() {
       if (maxPrice) params.maxPrice = maxPrice;
       if (sortBy) params.sortBy = sortBy;
       
-      const { data } = await axios.get('http://localhost:5000/api/products', { params })
+      const { data } = await axios.get(API_ENDPOINTS.PRODUCTS, { params })
       setProducts(data)
     } catch (err) {
       console.error(err)
@@ -38,7 +39,7 @@ export default function Home() {
 
   const fetchWishlist = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/wishlist', { headers: { Authorization: `Bearer ${token}` } })
+      const { data } = await axios.get(API_ENDPOINTS.WISHLIST, { headers: { Authorization: `Bearer ${token}` } })
       setWishlistIds(data.products.map(p => p._id))
     } catch (err) {
       console.error(err)
@@ -48,11 +49,11 @@ export default function Home() {
   const toggleWishlist = async (productId) => {
     try {
       if (wishlistIds.includes(productId)) {
-        await axios.delete(`http://localhost:5000/api/wishlist/${productId}`, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.delete(`${API_ENDPOINTS.WISHLIST}/${productId}`, { headers: { Authorization: `Bearer ${token}` } })
         setWishlistIds(wishlistIds.filter(id => id !== productId))
         alert('Removed from wishlist')
       } else {
-        await axios.post('http://localhost:5000/api/wishlist', { productId }, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.post(API_ENDPOINTS.WISHLIST, { productId }, { headers: { Authorization: `Bearer ${token}` } })
         setWishlistIds([...wishlistIds, productId])
         alert('Added to wishlist')
       }
@@ -70,7 +71,7 @@ export default function Home() {
     setMaxPrice('')
     setSortBy('')
     // Fetch all products without filters
-    axios.get('http://localhost:5000/api/products')
+    axios.get(API_ENDPOINTS.PRODUCTS)
       .then(res => setProducts(res.data))
       .catch(err => console.error(err))
   }
@@ -349,7 +350,7 @@ export default function Home() {
               {p.image && (
                 <div style={{ position: 'relative', overflow: 'hidden', height: '280px', background: '#f8f9fa' }}>
                   <img 
-                    src={`http://localhost:5000${p.image}`} 
+                    src={`${API_URL}${p.image}`} 
                     className="card-img-top" 
                     alt={p.name} 
                     style={{ 

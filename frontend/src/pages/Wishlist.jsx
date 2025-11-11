@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
+import { API_ENDPOINTS, API_URL } from '../config/api'
 
 export default function Wishlist() {
   const [wishlist, setWishlist] = useState(null)
@@ -12,13 +13,13 @@ export default function Wishlist() {
   }, [])
 
   const fetchWishlist = () => {
-    axios.get('http://localhost:5000/api/wishlist', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(API_ENDPOINTS.WISHLIST, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setWishlist(res.data))
       .catch(err => console.error(err))
   }
 
   const removeFromWishlist = (productId) => {
-    axios.delete(`http://localhost:5000/api/wishlist/${productId}`, { headers: { Authorization: `Bearer ${token}` } })
+    axios.delete(`${API_ENDPOINTS.WISHLIST}/${productId}`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         setWishlist(res.data)
         alert('Removed from wishlist')
@@ -117,7 +118,7 @@ export default function Wishlist() {
                 {p.image && (
                   <div style={{ position: 'relative', overflow: 'hidden', height: '250px' }}>
                     <img 
-                      src={`http://localhost:5000${p.image}`} 
+                      src={`${API_URL}${p.image}`} 
                       className="card-img-top" 
                       alt={p.name} 
                       style={{ 

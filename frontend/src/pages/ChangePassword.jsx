@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function ChangePassword() {
   const { token } = useAuth()
@@ -26,7 +27,7 @@ export default function ChangePassword() {
     }
     
     try {
-      await axios.put('http://localhost:5000/api/auth/profile', {
+      await axios.put(API_ENDPOINTS.PROFILE, {
         password: form.newPassword,
         currentPassword: form.currentPassword
       }, {

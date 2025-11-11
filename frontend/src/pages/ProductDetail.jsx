@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
+import { API_ENDPOINTS, API_URL } from '../config/api'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -19,7 +20,7 @@ export default function ProductDetail() {
   const { user, token } = useAuth()
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/products/${id}`)
+    axios.get(`${API_ENDPOINTS.PRODUCTS}/${id}`)
       .then(res => setProduct(res.data))
       .catch(err => console.error(err))
     
@@ -44,13 +45,13 @@ export default function ProductDetail() {
   }, [id, searchParams, user])
 
   const fetchReviews = () => {
-    axios.get(`http://localhost:5000/api/reviews/product/${id}`)
+    axios.get(`${API_ENDPOINTS.REVIEWS}/product/${id}`)
       .then(res => setReviews(res.data))
       .catch(err => console.error(err))
   }
 
   const fetchUserOrders = () => {
-    axios.get('http://localhost:5000/api/orders/my', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(API_ENDPOINTS.MY_ORDERS, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         console.log('All orders:', res.data)
         const deliveredOrders = res.data.filter(order => {
@@ -70,7 +71,7 @@ export default function ProductDetail() {
 
   const fetchWishlist = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/wishlist', { headers: { Authorization: `Bearer ${token}` } })
+      const { data } = await axios.get(API_ENDPOINTS.WISHLIST, { headers: { Authorization: `Bearer ${token}` } })
       setWishlistIds(data.products.map(p => p._id))
     } catch (err) {
       console.error(err)
@@ -80,11 +81,11 @@ export default function ProductDetail() {
   const toggleWishlist = async () => {
     try {
       if (wishlistIds.includes(id)) {
-        await axios.delete(`http://localhost:5000/api/wishlist/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.delete(`${API_ENDPOINTS.WISHLIST}/${id}`, { headers: { Authorization: `Bearer ${token}` } })
         setWishlistIds(wishlistIds.filter(pid => pid !== id))
         alert('Removed from wishlist')
       } else {
-        await axios.post('http://localhost:5000/api/wishlist', { productId: id }, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.post(API_ENDPOINTS.WISHLIST, { productId: id }, { headers: { Authorization: `Bearer ${token}` } })
         setWishlistIds([...wishlistIds, id])
         alert('Added to wishlist')
       }
@@ -98,7 +99,7 @@ export default function ProductDetail() {
       alert('Please select an order')
       return
     }
-    axios.post('http://localhost:5000/api/reviews', 
+    axios.post(API_ENDPOINTS.REVIEWS, 
       { productId: id, orderId: selectedOrderId, rating, comment },
       { headers: { Authorization: `Bearer ${token}` } }
     )
@@ -110,7 +111,7 @@ export default function ProductDetail() {
         setSelectedOrderId('')
         fetchReviews()
         // Refresh product to update rating
-        axios.get(`http://localhost:5000/api/products/${id}`)
+        axios.get(`${API_ENDPOINTS.PRODUCTS}/${id}`)
           .then(res => setProduct(res.data))
       })
       .catch(err => {
@@ -215,7 +216,7 @@ export default function ProductDetail() {
               )}
               {product.image && (
                 <img 
-                  src={`http://localhost:5000${product.image}`} 
+                  src={`${API_URL}${product.image}`} 
                   className="img-fluid" 
                   alt={product.name} 
                   style={{ 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function Cart() {
   const [cart, setCart] = useState([])
@@ -24,7 +25,7 @@ export default function Cart() {
     setCart(c)
     
     // Fetch saved address from profile
-    axios.get('http://localhost:5000/api/auth/profile', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(API_ENDPOINTS.PROFILE, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         if (res.data.address && res.data.address.fullName) {
           setSavedAddress(res.data.address)
@@ -54,7 +55,7 @@ export default function Cart() {
     
     const items = cart.map(c => ({ product: c.product, quantity: c.quantity }))
     try {
-      await axios.post('http://localhost:5000/api/orders', { 
+      await axios.post(API_ENDPOINTS.ORDERS, { 
         items, 
         shippingAddress: address 
       }, { 

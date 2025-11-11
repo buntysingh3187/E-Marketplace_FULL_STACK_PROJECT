@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../AuthContext'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function Register() {
   const [name, setName] = useState('')
@@ -20,7 +21,7 @@ export default function Register() {
       return
     }
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { name, email, password, role })
+      await axios.post(API_ENDPOINTS.REGISTER, { name, email, password, role })
       alert('Registration successful! Please login.')
       navigate('/login')
     } catch (err) {
